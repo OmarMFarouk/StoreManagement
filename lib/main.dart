@@ -1,18 +1,17 @@
-import 'package:bloc/bloc.dart';
+import 'package:desktop/blocs/auth_bloc/auth_bloc/auth_cubit.dart';
+import 'package:desktop/blocs/employee_bloc/employee_cubit.dart';
 import 'package:desktop/blocs/products_bloc/products_cubit.dart';
+import 'package:desktop/module/login.dart';
+import 'package:desktop/module/splash_screen.dart';
 import 'package:desktop/shared/bloc.dart';
 import 'package:desktop/src/app_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'module/layout/layoutScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppShared.init();
   Bloc.observer = MyBlocObserver();
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
   runApp(const MyApp());
 }
 
@@ -25,12 +24,16 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) => ProductsCubit()
               ..fetchProducts()
-              ..fetchReceipts())
+              ..fetchReceipts()),
+        BlocProvider(create: (context) => EmployeeCubit()..fetchEmployees()),
+        BlocProvider(create: (context) => AuthCubit())
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         title: 'Store Management',
         debugShowCheckedModeBanner: false,
-        home: LayoutScreen(),
+        home: AppShared.localStorage.getBool('active') == true
+            ? SplashScreen()
+            : LoginScreen(),
       ),
     );
   }

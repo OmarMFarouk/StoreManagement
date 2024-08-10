@@ -192,6 +192,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  font_awesome_flutter:
+    dependency: "direct main"
+    description:
+      name: font_awesome_flutter
+      sha256: "275ff26905134bcb59417cf60ad979136f1f8257f2f449914b2c3e05bbb4cd6f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.7.0"
   hexcolor:
     dependency: "direct main"
     description:
@@ -416,6 +424,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
+  rebirth:
+    dependency: "direct main"
+    description:
+      name: rebirth
+      sha256: "20979adb1a40da41d620f1cefb51ee90d53bfcec8a5284ea2b8ab97a673853b8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  restart_app:
+    dependency: "direct main"
+    description:
+      name: restart_app
+      sha256: b37daeb1c02fcab30e19d9e30b6fdd215bd53577efd927042eb77cf6f09daadb
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
+  restartfromos:
+    dependency: "direct main"
+    description:
+      name: restartfromos
+      sha256: "1f6e131be600aa8b40128df58f2025ab2723ce1c46d60b06746c55f4849096cd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   shared_preferences:
     dependency: "direct main"
     description:

@@ -387,7 +387,7 @@ class _SellItemState extends State<SellItem> {
               const Spacer(),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: Colors.grey[300],
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(20),
                     topLeft: Radius.circular(20),
@@ -447,8 +447,26 @@ class _SellItemState extends State<SellItem> {
                           const SizedBox(width: 20),
                           Expanded(
                             child: MaterialButton(
-                              onPressed: () =>
-                                  cubit.createReceipt(_cartProducts, sum),
+                              onPressed: () => _cartProducts.isNotEmpty
+                                  ? cubit.createReturn(_cartProducts, sum)
+                                  : null,
+                              color: Colors.orange.shade400,
+                              textColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(15),
+                                child: Text('مرتجع'),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: MaterialButton(
+                              onPressed: () => _cartProducts.isNotEmpty
+                                  ? cubit.createReceipt(_cartProducts, sum)
+                                  : null,
                               color: Colors.teal,
                               textColor: Colors.white,
                               shape: RoundedRectangleBorder(

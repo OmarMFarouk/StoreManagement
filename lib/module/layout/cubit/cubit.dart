@@ -1,11 +1,18 @@
 import 'package:desktop/module/addItem.dart';
+import 'package:desktop/module/employee_data.dart';
+import 'package:desktop/module/employees.dart';
 import 'package:desktop/module/layout/cubit/state.dart';
 import 'package:desktop/module/sell_item.dart';
+import 'package:desktop/module/splash_screen.dart';
+import 'package:desktop/src/app_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:rebirth/rebirth.dart';
+import 'package:restartfromos/restartatos.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:sqflite/sqflite.dart';
+import '../../../blocs/employee_bloc/employee_cubit.dart';
 import '../../items.dart';
 import '../../sales.dart';
 
@@ -31,6 +38,17 @@ class AppCubit extends Cubit<AppStates> {
     const SidebarXItem(icon: Icons.add, label: ' اضافة'),
     const SidebarXItem(icon: Icons.category_rounded, label: ' المبيعات'),
     const SidebarXItem(icon: Icons.data_object, label: ' البضاعة'),
+    currentEmployee.role == 'admin'
+        ? const SidebarXItem(icon: Icons.people, label: ' الموظفين')
+        : const SidebarXItem(icon: Icons.people, label: ' بياناتي'),
+    SidebarXItem(
+      icon: Icons.logout,
+      label: ' تسجيل خروج',
+      onTap: () async {
+        await AppShared.localStorage.setBool('active', false);
+        RestartFromOS.restartApp(appName: 'desktop');
+      },
+    ),
   ];
 
   List<Widget> screens = [
@@ -38,6 +56,10 @@ class AppCubit extends Cubit<AppStates> {
     const AddItem(),
     const SalesScreen(),
     const ItemsScreen(),
+    currentEmployee.role == 'admin'
+        ? const EmployeeScreen()
+        : const EmployeeDataScreen(),
+    const SplashScreen()
   ];
 
   Database? database;

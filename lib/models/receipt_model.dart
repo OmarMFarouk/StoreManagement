@@ -3,8 +3,14 @@ class Receipt {
   List<ReceiptItem?>? receiptitemlist;
   String? totalprice;
   String? datecreated;
+  String? employee;
 
-  Receipt({this.id, this.receiptitemlist, this.totalprice, this.datecreated});
+  Receipt(
+      {this.id,
+      this.receiptitemlist,
+      this.totalprice,
+      this.datecreated,
+      this.employee});
 
   Receipt.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -16,6 +22,7 @@ class Receipt {
     }
     totalprice = json['total_price'];
     datecreated = json['date_created'];
+    employee = json['created_by'];
   }
 }
 

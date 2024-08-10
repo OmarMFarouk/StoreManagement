@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:desktop/models/products_model.dart';
 import 'package:desktop/models/receipt_model.dart';
 import 'package:desktop/src/app_endpoints.dart';
+import 'package:desktop/src/app_shared.dart';
 import 'package:http/http.dart' as http;
 
 class ProductsApi {
@@ -44,8 +45,25 @@ class ProductsApi {
   }
 
   Future createReceipt({required data, required total}) async {
-    var request = await http.post(Uri.parse(AppEndPoints.createReceipt),
-        body: {'total_price': total, 'receipt_item_list': jsonEncode(data)});
+    var request = await http.post(Uri.parse(AppEndPoints.createReceipt), body: {
+      'total_price': total,
+      'receipt_item_list': jsonEncode(data),
+      'created_by': AppShared.localStorage.getString('username') ?? 'غير محدد'
+    });
+    print(request.body);
+    if (request.statusCode < 300) {
+      print(request.body);
+      var response = jsonDecode(request.body);
+      print(response);
+      return response;
+    } else {
+      log('error');
+    }
+  }
+
+  Future createReturn({required data, required total}) async {
+    var request = await http.post(Uri.parse(AppEndPoints.createReturn),
+        body: {'total_price': total, 'returned_items': jsonEncode(data)});
     print(request.body);
     if (request.statusCode < 300) {
       print(request.body);

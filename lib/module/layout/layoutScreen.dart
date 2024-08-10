@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sidebarx/sidebarx.dart';
 
-import '../../blocs/products_bloc/products_cubit.dart';
-
 class LayoutScreen extends StatefulWidget {
   const LayoutScreen({super.key});
 
@@ -16,16 +14,9 @@ class LayoutScreen extends StatefulWidget {
 
 class _LayoutScreenState extends State<LayoutScreen> {
   @override
-  void initState() {
-    BlocProvider.of<ProductsCubit>(context).fetchProducts();
-    BlocProvider.of<ProductsCubit>(context).fetchReceipts();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..createDatabase(),
+      create: (BuildContext context) => AppCubit(),
       child: BlocConsumer<AppCubit, AppStates>(
         builder: (context, state) {
           var cubit = AppCubit.get(context);

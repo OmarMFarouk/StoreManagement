@@ -76,6 +76,25 @@ class ProductsCubit extends Cubit<ProductsStates> {
   createReceipt(List<ReceiptItem> items, total) async {
     ProductsApi()
         .createReceipt(
+      data: items.map((e) => e.toJson()).toList(),
+      total: total.toString(),
+    )
+        .then((r) {
+      if (r['success'] == true) {
+        emit(ReceiptCreated(msg: r['message']));
+        fetchProducts();
+        clear();
+      } else if (r['success'] == false) {
+        emit(ProductsFailure(msg: r['message']));
+      } else {
+        emit(ProductsFailure(msg: 'Error'));
+      }
+    });
+  }
+
+  createReturn(List<ReceiptItem> items, total) async {
+    ProductsApi()
+        .createReturn(
             data: items.map((e) => e.toJson()).toList(),
             total: total.toString())
         .then((r) {

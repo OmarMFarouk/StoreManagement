@@ -52,6 +52,10 @@ dependencies:
   sidebarx: ^0.17.1
   http: ^1.2.2
   expansion_widget: ^0.1.0
+  font_awesome_flutter: ^10.7.0
+  restart_app: ^1.2.1
+  rebirth: ^1.0.2
+  restartfromos: ^0.0.3
 
 
 dev_dependencies:
@@ -77,8 +81,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

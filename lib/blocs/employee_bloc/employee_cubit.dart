@@ -1,4 +1,5 @@
 import 'package:desktop/models/employee_model.dart';
+import 'package:desktop/models/treasury_model.dart';
 import 'package:desktop/services/apis/employee_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,9 @@ class EmployeeCubit extends Cubit<EmployeeStates> {
 
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
   EmployeesModel employeesModel = EmployeesModel();
+  TreasuryModel? treasuryModel = TreasuryModel();
 
   fetchCurrentEmployeeData() async {
     EmployeesApi().fetchCurrentEmployeeData().then((r) {
@@ -47,9 +50,54 @@ class EmployeeCubit extends Cubit<EmployeeStates> {
                 .toJson())
         .then((r) {
       if (r['success'] == true) {
-        emit(EmployeeCreated());
+        emit(EmployeeSuccess(msg: r['message']));
         fetchEmployees();
         clearControllers();
+      } else if (r['success'] == false) {
+        emit(EmployeeFailure(msg: r['message']));
+      } else {
+        emit(EmployeeFailure(msg: 'Error'));
+      }
+    });
+  }
+
+  deleteEmployee({required employeeId}) async {
+    EmployeesApi().deleteEmployee(employeeId: employeeId).then((r) {
+      if (r['success'] == true) {
+        fetchEmployees();
+        emit(EmployeeSuccess(msg: r['message']));
+      } else if (r['success'] == false) {
+        emit(EmployeeFailure(msg: r['message']));
+      } else {
+        emit(EmployeeFailure(msg: 'Error'));
+      }
+    });
+  }
+
+  fetchTreasury() async {
+    EmployeesApi().fetchTreasury().then((r) {
+      if (r['success'] == true) {
+        emit(EmployeeLoaded());
+        treasuryModel = TreasuryModel.fromJson(r);
+      } else if (r['success'] == false) {
+        emit(EmployeeFailure(msg: r['message']));
+      } else {
+        emit(EmployeeFailure(msg: 'Error'));
+      }
+    });
+  }
+
+  treasuryRequest({required bool isWithdraw}) {
+    Treasury treasuryRequest = Treasury(
+        createdby: currentEmployee.username,
+        amount: amountController.text,
+        comment: usernameController.text,
+        type: isWithdraw == true ? 'outcome' : 'income');
+    EmployeesApi().treasuryRequest(model: treasuryRequest).then((r) {
+      if (r['success'] == true) {
+        fetchTreasury();
+        clearControllers();
+        emit(EmployeeSuccess(msg: r['message']));
       } else if (r['success'] == false) {
         emit(EmployeeFailure(msg: r['message']));
       } else {
@@ -61,6 +109,7 @@ class EmployeeCubit extends Cubit<EmployeeStates> {
   clearControllers() {
     usernameController.clear();
     passwordController.clear();
+    amountController.clear();
   }
 }
 

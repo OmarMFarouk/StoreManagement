@@ -21,11 +21,11 @@ class EmployeeScreen extends StatelessWidget {
           ),
         ));
       }
-      if (state is EmployeeCreated) {
+      if (state is EmployeeSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.green.shade400,
           content: Text(
-            'تم اضافة الموظف',
+            state.msg,
             textAlign: TextAlign.center,
           ),
         ));
@@ -134,8 +134,33 @@ class EmployeeScreen extends StatelessWidget {
                         trailing: IconButton(
                           icon: const Icon(Icons.delete, color: Colors.red),
                           onPressed: () {
-                            // EmployeeCubit.get(context)
-                            //     .deleteEmployee(employee.id!);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('تنبيه'),
+                                  content:
+                                      const Text('هل تريد ان تحذف هذا الموظف؟'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('نعم'),
+                                      onPressed: () {
+                                        cubit.deleteEmployee(
+                                            employeeId: cubit.employeesModel
+                                                .employees![index]!.id);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('لا'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                         ),
                       );

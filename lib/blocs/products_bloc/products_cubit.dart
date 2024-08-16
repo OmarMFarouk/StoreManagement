@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:desktop/blocs/products_bloc/products_states.dart';
 import 'package:desktop/models/products_model.dart';
 import 'package:desktop/models/receipt_model.dart';
@@ -16,6 +14,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
   var priceController = TextEditingController();
   ProductsModel? productsModel;
   ReceiptModel? receiptModel;
+  ReceiptModel? returnModel;
 
   fetchProducts() async {
     ProductsApi().fetchProducts().then((r) {
@@ -73,6 +72,19 @@ class ProductsCubit extends Cubit<ProductsStates> {
     });
   }
 
+  deleteProduct({required String productCode}) async {
+    ProductsApi().deleteProduct(productCode: productCode).then((r) {
+      if (r['success'] == true) {
+        fetchProducts();
+        emit(ProductUpdated());
+      } else if (r['success'] == false) {
+        emit(ProductsFailure(msg: r['message']));
+      } else {
+        emit(ProductsFailure(msg: 'Error'));
+      }
+    });
+  }
+
   createReceipt(List<ReceiptItem> items, total) async {
     ProductsApi()
         .createReceipt(
@@ -114,6 +126,19 @@ class ProductsCubit extends Cubit<ProductsStates> {
     await ProductsApi().fetchReceipts().then((r) {
       if (r['success'] == true) {
         receiptModel = ReceiptModel.fromJson(r);
+        emit(ProductsSuccess());
+      } else if (r['success'] == false) {
+        emit(ProductsFailure(msg: r['message']));
+      } else {
+        emit(ProductsFailure(msg: 'Error'));
+      }
+    });
+  }
+
+  fetchReturns() async {
+    await ProductsApi().fetchReturns().then((r) {
+      if (r['success'] == true) {
+        returnModel = ReceiptModel.fromJson(r);
         emit(ProductsSuccess());
       } else if (r['success'] == false) {
         emit(ProductsFailure(msg: r['message']));

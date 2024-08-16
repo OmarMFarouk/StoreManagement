@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:desktop/blocs/clients_bloc/clients_cubit.dart';
 import 'package:desktop/blocs/employee_bloc/employee_cubit.dart';
 import 'package:desktop/blocs/products_bloc/products_cubit.dart';
 import 'package:desktop/module/layout/layoutScreen.dart';
@@ -28,6 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
       BlocProvider.of<ProductsCubit>(context).fetchReceipts();
       BlocProvider.of<EmployeeCubit>(context).fetchEmployees();
       BlocProvider.of<EmployeeCubit>(context).fetchCurrentEmployeeData();
+      BlocProvider.of<EmployeeCubit>(context).fetchTreasury();
+      BlocProvider.of<ClientsCubit>(context).fetchClients();
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(

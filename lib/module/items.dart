@@ -227,7 +227,9 @@ Widget items({required Map model, context}) {
                         TextButton(
                           child: const Text('نعم'),
                           onPressed: () {
-                            // Add your delete logic here
+                            BlocProvider.of<ProductsCubit>(context)
+                                .deleteProduct(
+                                    productCode: model['product_code']);
                             Navigator.of(context).pop();
                           },
                         ),

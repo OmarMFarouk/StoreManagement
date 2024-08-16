@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'package:desktop/blocs/employee_bloc/employee_cubit.dart';
 import 'package:desktop/models/products_model.dart';
-import 'package:desktop/models/receipt_model.dart';
 import 'package:desktop/src/app_endpoints.dart';
 import 'package:desktop/src/app_shared.dart';
 import 'package:http/http.dart' as http;
@@ -44,11 +43,23 @@ class ProductsApi {
     }
   }
 
+  Future deleteProduct({required String productCode}) async {
+    var request = await http.post(Uri.parse(AppEndPoints.deleteProduct),
+        body: {'product_code': productCode});
+    if (request.statusCode < 300) {
+      print(request.body);
+      var response = jsonDecode(request.body);
+      return response;
+    } else {
+      log('error');
+    }
+  }
+
   Future createReceipt({required data, required total}) async {
     var request = await http.post(Uri.parse(AppEndPoints.createReceipt), body: {
       'total_price': total,
       'receipt_item_list': jsonEncode(data),
-      'created_by': AppShared.localStorage.getString('username') ?? 'غير محدد'
+      'created_by': currentEmployee.username
     });
     print(request.body);
     if (request.statusCode < 300) {
@@ -62,8 +73,11 @@ class ProductsApi {
   }
 
   Future createReturn({required data, required total}) async {
-    var request = await http.post(Uri.parse(AppEndPoints.createReturn),
-        body: {'total_price': total, 'returned_items': jsonEncode(data)});
+    var request = await http.post(Uri.parse(AppEndPoints.createReturn), body: {
+      'total_price': total,
+      'returned_items': jsonEncode(data),
+      'created_by': currentEmployee.username
+    });
     print(request.body);
     if (request.statusCode < 300) {
       print(request.body);
@@ -77,6 +91,16 @@ class ProductsApi {
 
   Future fetchReceipts() async {
     var request = await http.get(Uri.parse(AppEndPoints.showReceipts));
+    if (request.statusCode < 300) {
+      var response = jsonDecode(request.body);
+      return response;
+    } else {
+      log('error');
+    }
+  }
+
+  Future fetchReturns() async {
+    var request = await http.get(Uri.parse(AppEndPoints.showReturns));
     if (request.statusCode < 300) {
       var response = jsonDecode(request.body);
       return response;

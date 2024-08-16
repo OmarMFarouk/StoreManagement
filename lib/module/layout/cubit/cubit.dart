@@ -1,20 +1,24 @@
 import 'package:desktop/module/addItem.dart';
+import 'package:desktop/module/clientsData.dart';
 import 'package:desktop/module/employee_data.dart';
 import 'package:desktop/module/employees.dart';
 import 'package:desktop/module/layout/cubit/state.dart';
+import 'package:desktop/module/printing.dart';
+import 'package:desktop/module/return_data.dart';
 import 'package:desktop/module/sell_item.dart';
 import 'package:desktop/module/splash_screen.dart';
 import 'package:desktop/src/app_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:rebirth/rebirth.dart';
 import 'package:restartfromos/restartatos.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../../blocs/employee_bloc/employee_cubit.dart';
 import '../../items.dart';
 import '../../sales.dart';
+import '../../treasury.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState()) {
@@ -38,9 +42,14 @@ class AppCubit extends Cubit<AppStates> {
     const SidebarXItem(icon: Icons.add, label: ' اضافة'),
     const SidebarXItem(icon: Icons.category_rounded, label: ' المبيعات'),
     const SidebarXItem(icon: Icons.data_object, label: ' البضاعة'),
+    const SidebarXItem(icon: Icons.assignment_return, label: ' المرتجعات'),
+    const SidebarXItem(
+        icon: FontAwesomeIcons.codePullRequest, label: ' الخزينة'),
     currentEmployee.role == 'admin'
         ? const SidebarXItem(icon: Icons.people, label: ' الموظفين')
         : const SidebarXItem(icon: Icons.people, label: ' بياناتي'),
+    const SidebarXItem(icon: Icons.man_3, label: ' عملاء'),
+    // const SidebarXItem(icon: Icons.print, label: ' طباعة'),
     SidebarXItem(
       icon: Icons.logout,
       label: ' تسجيل خروج',
@@ -56,10 +65,14 @@ class AppCubit extends Cubit<AppStates> {
     const AddItem(),
     const SalesScreen(),
     const ItemsScreen(),
+    const ReturnScreen(),
+    const TreasuryScreen(),
     currentEmployee.role == 'admin'
         ? const EmployeeScreen()
         : const EmployeeDataScreen(),
-    const SplashScreen()
+    const AddClients(),
+    // const PrintingScreen(),
+    const SplashScreen(),
   ];
 
   Database? database;

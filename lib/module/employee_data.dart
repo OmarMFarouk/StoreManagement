@@ -1,4 +1,3 @@
-import 'package:desktop/models/employee_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/employee_bloc/employee_cubit.dart';
@@ -9,7 +8,6 @@ class EmployeeDataScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
     return BlocConsumer<EmployeeCubit, EmployeeStates>(
         listener: (context, state) {
       if (state is EmployeeFailure) {
@@ -21,11 +19,11 @@ class EmployeeDataScreen extends StatelessWidget {
           ),
         ));
       }
-      if (state is EmployeeCreated) {
+      if (state is EmployeeSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.green.shade400,
           content: Text(
-            'تم اضافة الموظف',
+            state.msg,
             textAlign: TextAlign.center,
           ),
         ));

@@ -6,7 +6,10 @@ class EmployeeLoading extends EmployeeStates {}
 
 class EmployeeLoaded extends EmployeeStates {}
 
-class EmployeeCreated extends EmployeeStates {}
+class EmployeeSuccess extends EmployeeStates {
+  String msg = '';
+  EmployeeSuccess({required this.msg});
+}
 
 class EmployeeFailure extends EmployeeStates {
   String msg = '';

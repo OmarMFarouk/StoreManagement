@@ -39,10 +39,10 @@ class _AddClientsState extends State<AddClients> {
       return Scaffold(
         backgroundColor: Colors.grey[200],
         appBar: AppBar(
-          title: Row(
+          title: const Row(
             children: [
-              const Spacer(),
-              const Text('ادارة العملاء',
+              Spacer(),
+              Text('ادارة العملاء',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -98,8 +98,8 @@ class _AddClientsState extends State<AddClients> {
                               FilteringTextInputFormatter.deny(' ')
                             ],
                             decoration: InputDecoration(
-                              label: Row(
-                                children: const [
+                              label: const Row(
+                                children: [
                                   Spacer(),
                                   Icon(
                                     CupertinoIcons.phone_solid,
@@ -127,8 +127,8 @@ class _AddClientsState extends State<AddClients> {
                             },
                             controller: cubit.nameCont,
                             decoration: InputDecoration(
-                              label: Row(
-                                children: const [
+                              label: const Row(
+                                children: [
                                   Spacer(),
                                   Icon(
                                     CupertinoIcons.person_solid,
@@ -205,34 +205,36 @@ class _AddClientsState extends State<AddClients> {
                     children: [
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             CupertinoIcons.phone_circle_fill,
                             color: Colors.teal,
                           ),
-                          SizedBox(width: 10),
-                          Text(
+                          const SizedBox(width: 10),
+                          SelectableText(
                             cubit.clientsModel!.clients![index]!.clientphone!,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
+                            cursorColor: Colors.blue,
                           ),
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Row(
                         children: [
-                          Text(
+                          SelectableText(
                             cubit.clientsModel!.clients![index]!.clientname!,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
+                            cursorColor: Colors.blue,
                           ),
-                          SizedBox(width: 10),
-                          Icon(
+                          const SizedBox(width: 10),
+                          const Icon(
                             CupertinoIcons.person_circle_fill,
                             color: Colors.teal,
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 30,
                       ),
                       IconButton(

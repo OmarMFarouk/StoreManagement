@@ -154,145 +154,142 @@ class _SellItemState extends State<SellItem> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          itemCount: _cartProducts.length,
-                          itemBuilder: (context, index) => Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Center(
-                                      child: TextButton.icon(
-                                        label: const Text(
-                                          'إزالة',
-                                          style: TextStyle(
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height < 800
+                              ? 370
+                              : 705,
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            itemCount: _cartProducts.length,
+                            itemBuilder: (context, index) => Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Center(
+                                        child: TextButton.icon(
+                                          label: const Text(
+                                            'إزالة',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              _cartProducts
+                                                  .remove(_cartProducts[index]);
+                                              calcSum(_cartProducts);
+                                            });
+                                          },
+                                          icon: const Icon(Icons.delete),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          remainder(cubit, index).toString(),
+                                          style: const TextStyle(
                                               fontSize: 18,
-                                              fontWeight: FontWeight.w500),
+                                              fontWeight: FontWeight.w400),
                                         ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _cartProducts
-                                                .remove(_cartProducts[index]);
-                                            calcSum(_cartProducts);
-                                          });
-                                        },
-                                        icon: const Icon(Icons.delete),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        remainder(cubit, index).toString(),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        (int.parse(_cartProducts[index]
-                                                    .productPrice!) *
-                                                _cartProducts[index].itemCount!)
-                                            .toString(),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                        child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        _cartProducts[index].productCode !=
-                                                'خصم'
-                                            ? IconButton(
-                                                onPressed: () {
-                                                  if (_cartProducts[index]
-                                                          .itemCount! <
-                                                      int.parse(remainder(
-                                                          cubit, index))) {
-                                                    setState(() {
-                                                      _cartProducts[index]
-                                                              .itemCount =
-                                                          _cartProducts[index]
-                                                                  .itemCount! +
-                                                              1;
-                                                      calcSum(_cartProducts);
-                                                    });
-                                                  }
-                                                },
-                                                icon: Icon(
-                                                  CupertinoIcons
-                                                      .plus_circle_fill,
-                                                  color: Colors.teal[800],
-                                                ))
-                                            : SizedBox(),
-                                        Text(
-                                          _cartProducts[index]
-                                              .itemCount
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          (int.parse(_cartProducts[index]
+                                                      .productPrice!) *
+                                                  _cartProducts[index]
+                                                      .itemCount!)
                                               .toString(),
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w400),
                                         ),
-                                        _cartProducts[index].productCode !=
-                                                'خصم'
-                                            ? IconButton(
-                                                onPressed: () {
-                                                  if (_cartProducts[index]
-                                                          .itemCount! >
-                                                      1) {
-                                                    setState(() {
-                                                      _cartProducts[index]
-                                                              .itemCount =
-                                                          _cartProducts[index]
-                                                                  .itemCount! -
-                                                              1;
-                                                      calcSum(_cartProducts);
-                                                    });
-                                                  }
-                                                },
-                                                icon: const Icon(
-                                                  CupertinoIcons
-                                                      .minus_circle_fill,
-                                                  color: Colors.teal,
-                                                ))
-                                            : SizedBox(),
-                                      ],
-                                    )),
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        _cartProducts[index].productName!,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400),
-                                        textDirection: TextDirection.rtl,
-                                        textAlign: TextAlign.right,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              if (index + 1 == _cartProducts.length)
-                                const SizedBox(height: 20),
-                              if (index + 1 == _cartProducts.length)
-                                Center(
-                                  child: Text(
-                                    'الاجمالي:  ${sum.toString()}',
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 30),
-                                  ),
+                                    Expanded(
+                                      child: Center(
+                                          child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          _cartProducts[index].productCode !=
+                                                  'خصم'
+                                              ? IconButton(
+                                                  onPressed: () {
+                                                    if (_cartProducts[index]
+                                                            .itemCount! <
+                                                        int.parse(remainder(
+                                                            cubit, index))) {
+                                                      setState(() {
+                                                        _cartProducts[index]
+                                                                .itemCount =
+                                                            _cartProducts[index]
+                                                                    .itemCount! +
+                                                                1;
+                                                        calcSum(_cartProducts);
+                                                      });
+                                                    }
+                                                  },
+                                                  icon: Icon(
+                                                    CupertinoIcons
+                                                        .plus_circle_fill,
+                                                    color: Colors.teal[800],
+                                                  ))
+                                              : SizedBox(),
+                                          Text(
+                                            _cartProducts[index]
+                                                .itemCount
+                                                .toString(),
+                                          ),
+                                          _cartProducts[index].productCode !=
+                                                  'خصم'
+                                              ? IconButton(
+                                                  onPressed: () {
+                                                    if (_cartProducts[index]
+                                                            .itemCount! >
+                                                        1) {
+                                                      setState(() {
+                                                        _cartProducts[index]
+                                                                .itemCount =
+                                                            _cartProducts[index]
+                                                                    .itemCount! -
+                                                                1;
+                                                        calcSum(_cartProducts);
+                                                      });
+                                                    }
+                                                  },
+                                                  icon: const Icon(
+                                                    CupertinoIcons
+                                                        .minus_circle_fill,
+                                                    color: Colors.teal,
+                                                  ))
+                                              : SizedBox(),
+                                        ],
+                                      )),
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          _cartProducts[index].productName!,
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w400),
+                                          textDirection: TextDirection.rtl,
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                            ],
+                              ],
+                            ),
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const SizedBox(height: 10),
                           ),
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const SizedBox(height: 10),
                         ),
                       ],
                     ),
@@ -397,35 +394,48 @@ class _SellItemState extends State<SellItem> {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      SizedBox(
-                        width: 300,
-                        child: TextField(
-                          controller: _discountController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          onSubmitted: (value) {
-                            setState(() {
-                              if (value.isNotEmpty && sum > int.parse(value)) {
-                                int discount = int.parse(value);
-                                sum = sum - discount;
-                                _cartProducts.add(ReceiptItem(
-                                    itemCount: 1,
-                                    productCode: 'خصم',
-                                    productName: 'خصم',
-                                    productPrice: '$discount'));
-                                _discountController.clear();
-                              }
-                            });
-                          },
-                          decoration: const InputDecoration(
-                            labelText: 'الخصم',
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(
+                            width: 300,
+                            child: TextField(
+                              controller: _discountController,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              onSubmitted: (value) {
+                                setState(() {
+                                  if (value.isNotEmpty &&
+                                      sum > int.parse(value)) {
+                                    int discount = int.parse(value);
+                                    sum = sum - discount;
+                                    _cartProducts.add(ReceiptItem(
+                                        itemCount: 1,
+                                        productCode: 'خصم',
+                                        productName: 'خصم',
+                                        productPrice: '$discount'));
+                                    _discountController.clear();
+                                  }
+                                });
+                              },
+                              decoration: const InputDecoration(
+                                labelText: 'الخصم',
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          Center(
+                            child: Text(
+                              'الاجمالي:  ${sum.toString()}',
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 30),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 20),
                       Row(

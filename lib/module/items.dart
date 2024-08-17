@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:desktop/blocs/products_bloc/products_cubit.dart';
 import 'package:desktop/blocs/products_bloc/products_states.dart';
-import 'package:desktop/module/layout/cubit/cubit.dart';
-import 'package:desktop/module/layout/cubit/state.dart';
+import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import '../blocs/employee_bloc/employee_cubit.dart';
+import '../models/receipt_model.dart';
 
 class ItemsScreen extends StatefulWidget {
   const ItemsScreen({super.key});
@@ -90,6 +93,15 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 const Row(
                   children: [
                     Spacer(),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'طباعة',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: Center(
                         child: Text(
@@ -215,34 +227,51 @@ Widget items({required Map model, context}) {
         Expanded(
           child: Center(
             child: IconButton(
+                icon: const Icon(Icons.local_printshop_rounded,
+                    color: Colors.teal),
+                onPressed: () => _printReceipt(
+                    Product.fromJson(model as Map<String, dynamic>))),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('تنبيه'),
-                      content: const Text('هل تريد ان تحذف هذا المنتج؟'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('نعم'),
-                          onPressed: () {
-                            BlocProvider.of<ProductsCubit>(context)
-                                .deleteProduct(
-                                    productCode: model['product_code']);
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: const Text('لا'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
+                if (currentEmployee.role != 'admin') {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                      'خارج صلاحيات الحساب',
+                      textAlign: TextAlign.center,
+                    ),
+                  ));
+                } else
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('تنبيه'),
+                        content: const Text('هل تريد ان تحذف هذا المنتج؟'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('نعم'),
+                            onPressed: () {
+                              BlocProvider.of<ProductsCubit>(context)
+                                  .deleteProduct(
+                                      productCode: model['product_code']);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: const Text('لا'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
               },
             ),
           ),
@@ -252,104 +281,112 @@ Widget items({required Map model, context}) {
             child: IconButton(
               icon: const Icon(Icons.edit, color: Colors.blue),
               onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: SingleChildScrollView(
-                        child: Builder(builder: (context) {
-                          nameController.text = model['product_name'];
-                          priceController.text = model['product_price'];
-                          amountController.text =
-                              model['product_quota'].toString();
-                          codeController.text =
-                              model['product_code'].toString();
-                          return Column(
-                            children: [
-                              const Center(
-                                child: Text(
-                                  'تعديل',
-                                  style: TextStyle(fontSize: 25),
-                                ),
-                              ),
-                              const SizedBox(height: 30),
-                              TextField(
-                                controller: nameController,
-                                textAlign: TextAlign.right,
-                                decoration: const InputDecoration(
-                                  label: Row(
-                                    children: [Spacer(), Text('إلاسم')],
+                if (currentEmployee.role != 'admin') {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                      'خارج صلاحيات الحساب',
+                      textAlign: TextAlign.center,
+                    ),
+                  ));
+                } else
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: SingleChildScrollView(
+                          child: Builder(builder: (context) {
+                            nameController.text = model['product_name'];
+                            priceController.text = model['product_price'];
+                            amountController.text =
+                                model['product_quota'].toString();
+                            codeController.text =
+                                model['product_code'].toString();
+                            return Column(
+                              children: [
+                                const Center(
+                                  child: Text(
+                                    'تعديل',
+                                    style: TextStyle(fontSize: 25),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              TextField(
-                                controller: amountController,
-                                textAlign: TextAlign.right,
-                                decoration: const InputDecoration(
-                                  label: Row(
-                                    children: [Spacer(), Text('الكمية')],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              TextField(
-                                controller: codeController,
-                                enabled: false,
-                                textAlign: TextAlign.right,
-                                decoration: const InputDecoration(
-                                  label: Row(
-                                    children: [Spacer(), Text('كود')],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              TextField(
-                                controller: priceController,
-                                textAlign: TextAlign.right,
-                                decoration: const InputDecoration(
-                                  label: Row(
-                                    children: [Spacer(), Text('السعر')],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              TextButton(
-                                onPressed: () {
-                                  BlocProvider.of<ProductsCubit>(context)
-                                      .updateProduct(
-                                    name: nameController.text,
-                                    quota: amountController.text,
-                                    code: codeController.text,
-                                    price: priceController.text,
-                                    id: model['id'],
-                                  );
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue[800],
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      'تعديل',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.white),
+                                const SizedBox(height: 30),
+                                TextField(
+                                  controller: nameController,
+                                  textAlign: TextAlign.right,
+                                  decoration: const InputDecoration(
+                                    label: Row(
+                                      children: [Spacer(), Text('إلاسم')],
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
-                    );
-                  },
-                );
+                                const SizedBox(height: 20),
+                                TextField(
+                                  controller: amountController,
+                                  textAlign: TextAlign.right,
+                                  decoration: const InputDecoration(
+                                    label: Row(
+                                      children: [Spacer(), Text('الكمية')],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                TextField(
+                                  controller: codeController,
+                                  enabled: false,
+                                  textAlign: TextAlign.right,
+                                  decoration: const InputDecoration(
+                                    label: Row(
+                                      children: [Spacer(), Text('كود')],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                TextField(
+                                  controller: priceController,
+                                  textAlign: TextAlign.right,
+                                  decoration: const InputDecoration(
+                                    label: Row(
+                                      children: [Spacer(), Text('السعر')],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                TextButton(
+                                  onPressed: () {
+                                    BlocProvider.of<ProductsCubit>(context)
+                                        .updateProduct(
+                                      name: nameController.text,
+                                      quota: amountController.text,
+                                      code: codeController.text,
+                                      price: priceController.text,
+                                      id: model['id'],
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue[800],
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'تعديل',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      );
+                    },
+                  );
               },
             ),
           ),
@@ -396,5 +433,40 @@ Widget items({required Map model, context}) {
         ),
       ],
     ),
+  );
+}
+
+Future<void> _printReceipt(Product product) async {
+  final pdf = pw.Document();
+  var font = await PdfGoogleFonts.cairoBold();
+  pdf.addPage(
+    pw.Page(
+      build: (pw.Context context) {
+        return pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.TableHelper.fromTextArray(
+                headers: ['Name', 'Price', 'Quantity', 'Code'],
+                cellStyle: pw.TextStyle(
+                  font: font,
+                ),
+                tableDirection: pw.TextDirection.rtl,
+                data: [
+                  [
+                    product.productname,
+                    product.productprice,
+                    product.productquota,
+                    product.productcode
+                  ]
+                ]),
+            pw.SizedBox(height: 20),
+          ],
+        );
+      },
+    ),
+  );
+
+  await Printing.layoutPdf(
+    onLayout: (PdfPageFormat format) async => pdf.save(),
   );
 }

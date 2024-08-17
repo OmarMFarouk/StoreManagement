@@ -1,8 +1,10 @@
 import 'package:desktop/blocs/employee_bloc/employee_cubit.dart';
 import 'package:desktop/blocs/employee_bloc/employee_states.dart';
 import 'package:desktop/models/treasury_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TreasuryScreen extends StatefulWidget {
@@ -54,171 +56,251 @@ class _TreasuryScreenState extends State<TreasuryScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      const Text(
-                        'المبلغ المتوفر بلخزنة',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.teal,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        sumBalance(cubit.treasuryModel!.treasury!) +
-                            '\tجنية', // Example balance, should be dynamically loaded
-
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      TextFormField(
-                        controller: cubit.amountController,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp('[0-9]'))
-                        ],
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return '*فارغ';
-                          } else if (int.parse(value) == 0) {
-                            return '*المبلغ غير صحيح';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.attach_money_outlined,
-                              color: Colors.teal, size: 28),
-                          label: Row(
-                            children: [Spacer(), Text('المبلغ')],
-                          ),
-                          labelStyle: TextStyle(color: Colors.teal),
-                          border: OutlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal),
-                          ),
-                        ),
-                        textDirection: TextDirection.rtl,
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: cubit.usernameController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return '*فارغ';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon:
-                              Icon(Icons.comment, color: Colors.teal, size: 28),
-                          label: Row(
-                            children: [Spacer(), Text('ملاحظات')],
-                          ),
-                          labelStyle: TextStyle(color: Colors.teal),
-                          border: OutlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal),
-                          ),
-                        ),
-                        textDirection: TextDirection.rtl,
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    cubit.treasuryRequest(isWithdraw: false);
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_upward_rounded,
-                                  color: Colors.white,
-                                ),
-                                label: const Text(
-                                  'إيداع',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 15),
-                                  backgroundColor: Colors.teal[800],
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    cubit.treasuryRequest(isWithdraw: true);
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_downward_rounded,
-                                  color: Colors.white,
-                                ),
-                                label: const Text(
-                                  'سحب',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 15),
-                                  backgroundColor: Colors.teal[800],
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        const Text(
+                          'المبلغ المتوفر بلخزنة',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.teal,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          sumBalance(cubit.treasuryModel!.treasury!) +
+                              '\tجنية', // Example balance, should be dynamically loaded
+
+                          textDirection: TextDirection.rtl,
+                          style: const TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        TextFormField(
+                          controller: cubit.amountController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp('[0-9]'))
+                          ],
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return '*فارغ';
+                            } else if (int.parse(value) == 0) {
+                              return '*المبلغ غير صحيح';
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.attach_money_outlined,
+                                color: Colors.teal, size: 28),
+                            label: Row(
+                              children: [Spacer(), Text('المبلغ')],
+                            ),
+                            labelStyle: TextStyle(color: Colors.teal),
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal),
+                            ),
+                          ),
+                          textDirection: TextDirection.rtl,
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: cubit.usernameController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return '*فارغ';
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.comment,
+                                color: Colors.teal, size: 28),
+                            label: Row(
+                              children: [Spacer(), Text('ملاحظات')],
+                            ),
+                            labelStyle: TextStyle(color: Colors.teal),
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal),
+                            ),
+                          ),
+                          textDirection: TextDirection.rtl,
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      cubit.treasuryRequest(isWithdraw: false);
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_upward_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text(
+                                    'إيداع',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15),
+                                    backgroundColor: Colors.teal[800],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      cubit.treasuryRequest(isWithdraw: true);
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_downward_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text(
+                                    'سحب',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15),
+                                    backgroundColor: Colors.teal[800],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 25,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  height: 300,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      const Row(
+                        children: [
+                          Spacer(),
+                          Expanded(
+                            child: Text(
+                              'بواسطة',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'المبلغ',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'النوع',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'الملاحظة',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'التاريخ',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Expanded(
+                        child: ListView.separated(
+                            itemBuilder: (context, index) => treasuryItem(
+                                cubit.treasuryModel!.treasury![index]),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                            itemCount: cubit.treasuryModel!.treasury!.length),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       );
@@ -238,3 +320,39 @@ sumBalance(List<Treasury> treasuryList) {
   }
   return total.toString();
 }
+
+Widget treasuryItem(Treasury treasury) => Row(
+      children: [
+        const Spacer(),
+        Expanded(
+          child: Text(
+            '${treasury.createdby}',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            '${treasury.amount}',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            '${treasury.type == 'income' ? 'إيداع' : 'سحب'}',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            '${treasury.comment}',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            '${treasury.datecreated}',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+        ),
+      ],
+    );

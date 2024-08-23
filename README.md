@@ -19,8 +19,8 @@ Windows project is created using flutter framework.
 ## VERSION OF THIS PROJECT
 . Version 1.0.0 @ 2024-8-16
 
-CONTACT ME
+## CONTACT ME
 . Telegram @ pr0af . Email @ o.m200233@gmail.com . Mobile @ +201122195310
 
-THANK YOU
+## THANK YOU
 . Please feel free to follow me and star my repo <3

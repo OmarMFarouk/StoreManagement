@@ -1,16 +1,20 @@
-# desktop
+# Store Management System
 
-A new Flutter project.
+Windows project is created using flutter framework.
 
-## Getting Started
+## LOGIC USED IN THIS PROJECT
+. BloC State Management
+. Sqflite
+. Shared Preferences
+. Responsive Design
+. Charts
 
-This project is a starting point for a Flutter application.
+## USES OF THIS PROJECT
+. Manage all your products in one place
+. Employee management with salary and attendance system
+. Helps track all receipts and returns of your business
+. Save clients data and purchase details.
+. Has casheir functionality to track all expenses and income
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## VERSION OF THIS PROJECT
+. Version 1.0.0 @ 2024-8-16

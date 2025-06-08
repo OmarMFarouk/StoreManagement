@@ -16,6 +16,16 @@ Windows project is created using flutter framework.
 . Save clients data and purchase details.
 . Has casheir functionality to track all expenses and income
 
+## SCREENSHOTS
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+  <img src="https://i.ibb.co/VcLbxm57/5.jpg" alt="Products" width="200" border="0">
+  <img src="https://i.ibb.co/nsgP2rYc/6.jpg" alt="Cashier" width="200" border="0">
+  <img src="https://i.ibb.co/kVR6wnHC/3.jpg" alt="Clients" width="200" border="0">
+  <img src="https://i.ibb.co/DPL5t4YZ/1.jpg" alt="Treasury" width="200" border="0">
+  <img src="https://i.ibb.co/JjrYm155/2.jpg" alt="Receipts" width="200" border="0">
+  <img src="https://i.ibb.co/TD39MNfd/4.jpg" alt="Auth Portal" width="200" border="0">
+</div>
+
 ## VERSION OF THIS PROJECT
 . Version 1.0.0 @ 2024-8-16
 
